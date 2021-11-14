@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Fly to a location based on scroll position</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js"></script>
+  <style>
+  body { margin: 0; padding: 0; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+  <style>
+  #map {
+    position: fixed;
+    width: 50%;
+  }
+  #features {
+    width: 50%;
+    margin-left: 50%;
+    font-family: sans-serif;
+    overflow-y: scroll;
+    background-color: #fafafa;
+  }
+  section {
+    padding: 25px 50px;
+    line-height: 25px;
+    border-bottom: 1px solid #ddd;
+    opacity: 0.25;
+    font-size: 13px;
+  }
+  section.active {
+    opacity: 1;
+  }
+  section:last-child {
+    border-bottom: none;
+    margin-bottom: 200px;
+  }
+</style>
+
+<div id="map"></div>
+<div id="features">
+  <section id="Antamina" class="active">
+    <h3>Antamina mine, Peru.</h3>
+    <p>
+      Extraction and production.
+        <p>
+      Is a copper-zinc-silver mine located in the Andes Mountains of Peru, in the Department of Ancash. Antamina mine, the ninth biggest silver mine in the world, produces silver and lead concentrates as byproducts. The mine is an open pit, truck/shovel operation. A 302-kilometre slurry concentrate pipeline transports copper and zinc concentrates to the port for shipment to smelters and refineries world-wide. The Antamina Mine is owned by Glencore Plc. and produced an estimated 13,380 Thousand Ounces of silver in 2020. The mine will operate until 2028.
+        <p>
+      Antamina has been innovative in its approach to a number of environmental, and cultural issues, and as a result, has set new standards in Perú for environmental and community management, and sustainable development.
+    </p>
+  </section>
+  <section id="Cerro verde">
+    <h3>Cerro verde mine, Peru</h3>
+    <p>
+      Cooper Extraction and production.
+    <p>
+      The Cerro Verde mine is a very large copper mine located about 20 miles southwest of Arequipa, in southwestern Peru. Cerro Verde represents one of the largest copper reserves in Peru and in the world, having estimated reserves of 4.63 billion tonnes of ore grading 0.4% copper and 113.2 million oz of silver.
+    </p>
+  </section>
+  <section id="Resolution copper">
+    <h3>Resolution copper mine, USA</h3>
+    <p>
+      Cooper Extraction and production.
+    <p>
+      Resolution Copper is one of the largest undeveloped copper projects in the world and has the potential to become the largest copper producer in North America. The Resolution Copper Project is located in the Copper triangle, 60 miles east of Phoenix, Arizona in the United States.
+    </p>
+  </section>
+  <section id="Apumayo">
+    <h3>Apumayo mine, Peru</h3>
+    <p>
+      Extraction and production.
+    <p>
+      The Apumayo mining project proposes the development of mining activities in an area of 1905. 81 hectares for the effective area of mining use, located in the districts of Chaviña and Sancos, Lucanas province, in Ayacucho, Peru. It is important to indicate that the project area is within the surface area of the peasant communities of Para and Sancos, identified as part of the Quechua peoples. It is owned by Minera Andina de Exploraciones SAA and produced an estimated 17,508 Thousand Ounces of silver in 2020.
+    </p>
+  </section>
+  <section id="Toromocho">
+    <h3>Toromocho mine, Peru</h3>
+    <p>
+      Extraction and production.
+    <p>
+      The Toromocho mine is a large copper mine in the center of Peru, in Junín Region. Toromocho represents one of the largest copper reserves in Peru and in the world, having estimated reserves of 1.52 billion tonnes of ore grading 0.48% copper, 0.019% molybdenum and 336 million oz of silver. It is owned by Aluminum Corporation of China and produced an estimated 7,297 Thousand Ounces of silver in 2020. The mine will operate until 2056.
+    </p>
+  </section>
+  <section id="Uchucchacua">
+    <h3>Uchucchacua mine, Peru</h3>
+    <p>
+      Extraction and production.
+    <p>
+      Located in the Province of Oyón, Region of Lima, Peru. Uchucchacua (100% Buenaventura company) is an underground operation discovered by Buenaventura that produces silver, lead, and zinc. The mine produced an estimated 5,000 Thousand Ounces of silver in 2020. The mine will operate until 2025. It is the seventh biggest and highest-grade silver mine in the top 10 list. It commenced operations in 1975. Peru's largest publicly-traded precious metals mining company. On October 15 operations were suspended due to a local community strike initiated on September 13, 2021. Buenaventura has requested an extended suspension of operations as it has identified an important opportunity to meaningfully improve efficiency and profitability at its operations.
+
+    </p>
+  </section>
+  <section id="Inmaculada">
+    <h3>Inmaculada mine, Peru</h3>
+    <p>
+      Extraction and production.
+    <p>
+      Owned by Hochschild Mining, the Inmaculada Mine is an underground mine located in Cusco. It produced an estimated 4,034 Thousand Ounces of silver in 2020. The mine will operate until 2026.
+    </p>
+  </section>
+  <section id="Saucito">
+    <h3>Saucito mine, Mexico</h3>
+    <p>
+      Extraction and production.
+    <p>
+      Located in Zacatecas, Mexico, 8km SW of the Fresnillo mine, Saucito is one of Fresnillo’s most important assets. With nearly 22 million ounces of silver produced in 2016, Fresnillo’s Saucito silver mine is the largest silver operation in the world. Silver output at Saucito dropped 10% compared to 2019 (17.2 Moz).
+    </p>
+  </section>
+  <section id="Penasquito">
+    <h3>Peñasquito mine, Mexico</h3>
+    <p>
+      Extraction and production.
+    <p>
+      Newmont’s Penasquito polymetallic mine is Mexico’s largest gold producer, consisting of two open pits – Peñasco and Chile Colorado – containing gold, silver, lead and zinc. Penasquito is an open-pit mine that employs flotation-and-grinding processing, in two 50,000-tonne/day sulphide processing lines and a 30,000-tonne/day high-pressure grinding roll circuit. Penasquito increased silver output by 22% in 2020 to 27.8 Moz and sits second in the list of biggest silver producing operations worldwide.
+    </p>
+  </section>
+  <section id="San Julian">
+    <h3>San Julian mine, Mexico</h3>
+    <p>
+      Extraction and production.
+    <p>
+      The San Julián silver-gold mine in Mexico is Fresnillo’s cornerstone project. The geological potential identified in the region thus far may be sufficient to establish a new mining district in the future. It was discovered in 1800, this mine obtains gold and silver concentrates (10,500 tons / day) with grades of 1.8 grams of gold per ton of processed metal and 160 grams of silver per ton.
+    </p>
+  </section>
+  <section id="Fresnillo">
+    <h3>Fresnillo mine, Mexico</h3>
+    <p>
+      Extraction and production.
+    <p>
+      Fresnillo’s eponymous mine is the seventh largest silver producer and one of the world’s oldest continuously operating mines. It is remarkable that mining operations have been recorded at the site as far back as 1554.
+    </p>
+  </section>
+  <section id="Green creek">
+    <h3>Green creek, USA</h3>
+    <p>
+      Extraction and production.
+    <p>
+      Greens Creek mine is located in southeast Alaska and is one of the largest and lowest-cost primary silver mines in the world. The Greens Creek orebody contains silver, zinc, gold and lead, and lies within the Admiralty Island National Monument, an environmentally sensitive area.
+    </p>
+  </section>
+  <section id="USA">
+    <h3>USA</h3>
+    <p>
+      Distribution from Peru/Mexico mines.
+    </p>
+  </section>
+  <section id="Canada">
+    <h3>Canada</h3>
+    <p>
+      Distribution from Peru/Mexico mines.
+    </p>
+  </section>
+  <section id="Chile">
+    <h3>Chile</h3>
+    <p>
+      Distribution from Peruvian mines.
+    </p>
+  </section>
+  <section id="Argentina">
+    <h3>Argentina</h3>
+    <p>
+      Distribution from Peruvian mines.
+    </p>
+  </section>
+  <section id="Brazil">
+    <h3>Brazil</h3>
+    <p>
+      Distribution from Peru/Mexico mines.
+    </p>
+  </section>
+  <section id="United Arab Emirates">
+    <h3>United Arab Emirates</h3>
+    <p>
+      Distribution from Peruvian mines.
+    </p>
+  </section>
+  <section id="Japan">
+    <h3>Japan</h3>
+    <p>
+      Distribution from Mexican mines.
+    </p>
+  </section>
+  <section id="Switzerland">
+    <h3>Switzerland</h3>
+    <p>
+      Distribution from Mexican mines.
+    </p>
+  </section>
+  <section id="India">
+    <h3>India</h3>
+    <p>
+      Distribution from Mexican mines.
+    </p>
+  </section>
+  <section id="Italy">
+    <h3>Italy</h3>
+    <p>
+      Distribution from Mexican mines.
+    </p>
+  </section>
+  <section id="">
+    <h3></h3>
+    <p>
+      Information retrieved from:
+        <p>
+      https://santabarbaraconsultants.com/en/antamina-project-challenge-sustainable-development-peru/
+        <p>
+      https://www.wheatonpm.com/streams/antamina/default.aspx
+        <p>
+      https://www.mining-technology.com/marketdata/five-largest-silver-mines-peru-2020/
+        <p>
+      https://www.mining-technology.com/projects/cerro-verde-copper-molybdenum-mine/
+        <p>
+      https://www.bhp.com/what-we-do/global-locations/united-states/resolution-copper-arizona
+        <p>
+      https://everythingmountains.com/the-highest-mines-in-the-world/
+        <p>
+      http://www.fresnilloplc.com/where-we-do-it/all-operations/
+        <p>
+      http://www.fresnilloplc.com/what-we-do/mines-in-operation/san-julian-phase-i-and-ii/
+        <p>
+      https://www.kitco.com/news/2021-04-09/The-world-s-top-10-largest-silver-mines-in-2020-report.html
+        <p>
+      https://www.hecla-mining.com/greens-creek/
+        <p>
+      https://www.nsenergybusiness.com/news/top-five-copper-mining-countries/
+        <p>
+      https://www.kitco.com/news/2014-07-16/Worlds-Largest-Silver-Producing-Countries-Peru.html
+
+    </p>
+  </section>
+  <section id="">
+    <h3></h3>
+    <p>
+
+    </p>
+  </section>
+  <section id="">
+    <h3></h3>
+    <p>
+
+    </p>
+  </section>
+  <section id="">
+    <h3></h3>
+    <p>
+
+    </p>
+  </section>
+  <section id="">
+    <h3></h3>
+    <p>
+
+    </p>
+  </section>
+  <section id="">
+    <h3></h3>
+    <p>
+
+    </p>
+  </section>
+  <section id="">
+    <h3></h3>
+    <p>
+
+    </p>
+
+  </section>
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiaHNoZXIiLCJhIjoiY2t1eTdsb2J5NnpxMzMycTZsdDBjNGJydyJ9.XBtOOSlQgXStCmUCI6UUqQ';
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-v9',
+  center: [-77.03637, -9.56504],
+  zoom: 14,
+  bearing: 27,
+  pitch: 45
+});
+
+const chapters = {
+  'Antamina': {
+    bearing: 27,
+    center: [-77.03637, -9.56504],
+    zoom: 14,
+    pitch: 20
+  },
+  'Cerro verde': {
+    duration: 6000,
+    center: [-71.57839, -16.53460],
+    bearing: 150,
+    zoom: 13,
+    pitch: 0
+  },
+  'Resolution copper': {
+    bearing: 90,
+    center: [-111.09911, 33.29933],
+    zoom: 14,
+    speed: 0.6,
+    pitch: 40
+  },
+  'Apumayo': {
+    bearing: 90,
+    center: [-73.91428, -14.95068],
+    zoom: 14
+  },
+  'Toromocho': {
+    bearing: 45,
+    center: [-76.14064, -11.61944],
+    zoom: 14,
+    pitch: 20,
+    speed: 0.5
+  },
+  'Uchucchacua': {
+    bearing: 180,
+    center: [-76.68885, -10.62356],
+    zoom: 14
+  },
+  'Inmaculada': {
+    bearing: 90,
+    center: [-73.24214, -14.95830],
+    zoom: 14,
+    pitch: 40
+  },
+  'Saucito': {
+    bearing: 90,
+    center: [-102.92672, 23.12693],
+    zoom: 14,
+    pitch: 20
+  },
+  'Penasquito': {
+    bearing: 90,
+    center: [-101.71784, 24.65722],
+    zoom: 12,
+    pitch: 20
+  },
+  'San Julian': {
+    bearing: 90,
+    center: [-106.50095, 26.03174],
+    zoom: 14,
+    pitch: 20
+  },
+  'Fresnillo': {
+    bearing: 90,
+    center: [-102.87276, 23.16264],
+    zoom: 14,
+    pitch: 20
+  },
+  'Green creek': {
+    bearing: 90,
+    center: [-134.63926, 58.08251],
+    zoom: 15,
+    pitch: 20
+  },
+  'USA': {
+    bearing: 90,
+    center: [-77.03667, 38.89802],
+    zoom: 14,
+    pitch: 20
+  },
+  'Canada': {
+    bearing: 90,
+    center: [-75.69981, 45.42566],
+    zoom: 14,
+    pitch: 20
+  },
+  'Chile': {
+    bearing: 90,
+    center: [-70.68529, -33.44487],
+    zoom: 14,
+    pitch: 20
+  },
+  'Argentina': {
+    bearing: 90,
+    center: [-58.37039, -34.60788],
+    zoom: 14,
+    pitch: 20
+  },
+  'Brazil': {
+    bearing: 90,
+    center: [-47.86422, -15.79938],
+    zoom: 14,
+    pitch: 20
+  },
+  'United Arab Emirates': {
+    bearing: 90,
+    center: [54.39222, 24.45348],
+    zoom: 14,
+    pitch: 20
+  },
+  'Japan': {
+    bearing: 90,
+    center: [139.75225, 35.68580],
+    zoom: 14,
+    pitch: 20
+  },
+  'Switzerland': {
+    bearing: 90,
+    center: [7.44427,46.94685],
+    zoom: 14,
+    pitch: 20
+  },
+  'India': {
+    bearing: 90,
+    center: [77.22875, 28.61481],
+    zoom: 14,
+    pitch: 20
+  },
+  'Italy': {
+    bearing: 90,
+    center: [12.49185, 41.89146],
+    zoom: 14,
+    pitch: 20
+  }
+};
+
+let activeChapterName = 'baker';
+function setActiveChapter(chapterName) {
+  if (chapterName === activeChapterName) return;
+
+  map.flyTo(chapters[chapterName]);
+
+  document.getElementById(chapterName).classList.add('active');
+  document.getElementById(activeChapterName).classList.remove('active');
+
+  activeChapterName = chapterName;
+}
+
+function isElementOnScreen(id) {
+  const element = document.getElementById(id);
+  const bounds = element.getBoundingClientRect();
+  return bounds.top < window.innerHeight && bounds.bottom > 0;
+}
+
+// On every scroll event, check which element is on screen
+window.onscroll = () => {
+  for (const chapterName in chapters) {
+    if (isElementOnScreen(chapterName)) {
+      setActiveChapter(chapterName);
+      break;
+    }
+  }
+};
+</script>
+
+</body>
+</html>

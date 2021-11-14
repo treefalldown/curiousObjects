@@ -1,5 +1,6 @@
 
 function setup() {
+  scale(0.85)
   createCanvas(600, 600);
   angleMode(DEGREES);
 
@@ -8,6 +9,7 @@ function setup() {
 function draw() {
   background(250)
 
+  scale(0.85)
 
   //top rect
   rect(304,136,8,24,5)
